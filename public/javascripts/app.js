@@ -36,7 +36,27 @@ let contacts = [
   }
 ];
 
-$(() => {
-  let contactsTemplate = Handlebars.compile($('#contacts').html());
-  $('body').append(contactsTemplate({contacts}));
-});
+class App {
+  constructor() {
+    this.renderPage();
+    this.bindEvents();
+  }
+
+  renderPage() {
+    let contactsTemplate = Handlebars.compile($('#contacts').html());
+    $('body').append(contactsTemplate({contacts}));
+  }
+
+  bindEvents() {
+    $('#add').on('click', $.proxy(this.handleAddClick, this));
+  }
+
+  handleAddClick() {
+    $('#add-edit-form-title').text('Create Contact');
+    $('#contacts-wrapper').css('visibility', 'hidden');
+    $('#add-edit-contact').css('visibility', 'visible');
+    $('#add-edit-contact').animate({'margin-top': '25px'}, 400, 'linear');
+  }
+}
+
+$(() => new App);

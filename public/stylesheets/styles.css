@@ -12,8 +12,10 @@ h1 {
   color: white;
   height: 150px;
   line-height: 150px;
+  position: relative;
   text-align: center;
   width: 100%;
+  z-index: 5;
 }
 
 #actions {
@@ -25,7 +27,9 @@ h1 {
   height: 100px;
   justify-content: space-around;
   margin: auto;
+  position: relative;
   width: 80%;
+  z-index: 5;
 }
 
 button, label.checkbox {
@@ -137,8 +141,10 @@ ul {
   left: 10%;
   margin: 20px 0;
   position: absolute;
+  margin-top: -500px;
   visibility: hidden;
   width: 80%;
+  z-index: 0;
 }
 
 #contact-inputs {
