@@ -8,33 +8,33 @@ html {
 }
 
 h1 {
-  width: 100%;
   background-color: rgb(111, 84, 153);
-  text-align: center;
+  color: white;
   height: 150px;
   line-height: 150px;
-  color: white;
+  text-align: center;
+  width: 100%;
 }
 
 #actions {
-  width: 80%;
-  margin: auto;
-  display: flex;
-  justify-content: space-around;
   align-items: center;
   background-color: rgb(228, 226, 226);
   border: 1px solid rgb(173, 172, 172);
   border-radius: 5px;
+  display: flex;
   height: 100px;
+  justify-content: space-around;
+  margin: auto;
+  width: 80%;
 }
 
 button, label.checkbox {
-  font-size: 1.5rem;
   background-color: transparent;
-  color: rgb(111, 84, 153);
-  width: 20%;
-  height: 60px;
   border-radius: 5px;
+  color: rgb(111, 84, 153);
+  font-size: 1.5rem;
+  height: 60px;
+  width: 20%;
 }
 
 label.checkbox {
@@ -53,26 +53,26 @@ input:checked + label {
 }
 
 input:not([type="checkbox"]) {
+  border-radius: 5px;
   font-size: 1.3rem;
   padding: 3px;
-  border-radius: 5px;
 }
 
 #contacts-wrapper {
   display: flex;
   justify-content: space-around;
-  width: 100%;
   margin: 15px 10px 0 10px;
+  width: 100%;
 }
 
 .contact {
-  width: 25%;
   font-size: 1.3rem;
+  width: 25%;
 }
 
 dl {
-  margin: 10px 0;
   display: flex;
+  margin: 10px 0;
 }
 
 dt {
@@ -88,28 +88,28 @@ dd {
 }
 
 .button-wrapper {
-  width: 100%;
   display: flex;
+  width: 100%;
 }
 
 .button-wrapper button {
-  width: 40%;
   margin-right: 15px;
+  width: 40%;
 }
 
 #filter-form {
-  position: absolute;
-  display: flex;
   align-items: center;
-  justify-content: space-around;
-  top: 150px;
-  left: 10%;
-  width: 80%;
   background-color: rgb(228, 226, 226);
   border: 1px solid rgb(173, 172, 172);
   border-radius: 5px;
+  display: flex;
   height: 100px;
+  justify-content: space-around;
+  left: 10%;
+  position: absolute;
+  top: 150px;
   visibility: hidden;
+  width: 80%;
 }
 
 ul {
@@ -117,9 +117,9 @@ ul {
 }
 
 #filter-tags {
+  align-items: center;
   display: flex;
   justify-content: space-around;
-  align-items: center;
   width: 75%;
 }
 
@@ -128,15 +128,15 @@ ul {
 }
 
 #add-edit-contact {
-  margin: 20px 0;
-  width: 80%;
-  font-size: 1.3rem;
+  align-items: center;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  position: absolute;
+  font-size: 1.3rem;
   left: 10%;
+  margin: 20px 0;
+  position: absolute;
   visibility: hidden;
+  width: 80%;
 }
 
 #contact-inputs {
@@ -151,25 +151,25 @@ ul {
 }
 
 #contact-inputs li {
-  width: 80%;
   display: flex;
   justify-content: flex-end;
+  width: 80%;
 }
 
 #contact-inputs input {
-  width: 65%;
+  box-sizing: border-box;
   margin-left: 15px;
   margin-bottom: 20px;
-  box-sizing: border-box;
+  width: 65%;
 }
 
 fieldset {
-  width: 65%;
-  margin-left: 15px;
   border: none;
   display: flex;
-  justify-content: space-between;
   flex-wrap: wrap;
+  justify-content: space-between;
+  margin-left: 15px;
+  width: 65%;
 }
 
 #tag-inputs input {
@@ -178,16 +178,16 @@ fieldset {
 }
 
 #tag-inputs button {
-  width: 48%;
-  height: 35px;
   font-size: 1.2rem;
+  height: 35px;
+  width: 48%;
 }
 
 #add-edit-contact .button-wrapper {
-  justify-content: space-around;
-  width: 58%;
-  margin-right: 17%;
   align-self: flex-end;
+  justify-content: space-around;
+  margin-right: 17%;
+  width: 58%;
 }
 
 #add-edit-contact .button-wrapper button {
