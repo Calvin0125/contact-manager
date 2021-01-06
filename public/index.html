@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Contact Manager</title>
+  <link href="./stylesheets/styles.css" rel="stylesheet">
+  <script src="./javascripts/handlebars.js"></script>
+</head>
+<body>
+  <h1>Contact Manager</h1>
+  <div id="actions">
+    <button id="add">Add Contact</button>
+    <button id="filter">Filter Contacts</button>
+    <input type="text" id="search" placeholder="Search">
+  </div>
+  <form id="filter-form">
+    <ul id="filter-tags">
+      <li>
+        <input id="one" type="checkbox" hidden>
+        <label for="one">Work</label>
+      </li>
+      <li>
+        <input id="two" type="checkbox" hidden>
+        <label for="two">School</label>
+      </li>
+    </ul>
+    <button id="submit-filter-form">Filter</button>
+  </form>
+  <script id="contacts" type="text/x-handlebars">
+    <div id="contacts-wrapper">
+    {{#each contacts}}
+      <div class="contact">
+        <h2>{{full_name}}</h2>
+        <dl>
+          <dt>Phone Number:</dt>
+          <dd>{{phone_number}}</dd>
+        </dl>
+        <dl>
+          <dt>Email:</dt>
+          <dd>{{email}}</dd>
+        </dl>
+        <dl>
+          <dt>Tags:</dd>
+            {{#if tags}}
+              {{#each tags}}
+                <dd class="tag">{{this}}</dd>
+              {{/each}}
+            {{else}}
+              <dd class="tag">None</dd>
+            {{/if}}
+        </dl>
+        <div id="contact-button-wrapper">
+          <button class="edit" data-id="{{id}}">Edit</button>
+          <button class="delete" data-id="{{id}}">Delete</button>
+        </div>
+      </div>
+    {{/each}}
+    </div>
+  </script>
+  <script src="./javascripts/jquery.js"></script>
+  <script src="./javascripts/app.js"></script>
+</body>
+</html>

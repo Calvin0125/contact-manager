@@ -1,0 +1,122 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+}
+
+h1 {
+  width: 100%;
+  background-color: rgb(111, 84, 153);
+  text-align: center;
+  height: 150px;
+  line-height: 150px;
+  color: white;
+}
+
+#actions {
+  width: 80%;
+  margin: auto;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: rgb(228, 226, 226);
+  border: 1px solid rgb(173, 172, 172);
+  border-radius: 5px;
+  height: 100px;
+}
+
+button, label {
+  font-size: 1.5rem;
+  background-color: transparent;
+  color: rgb(111, 84, 153);
+  width: 20%;
+  height: 60px;
+  border-radius: 5px;
+}
+
+label {
+  background-image: url('../images/empty-checkbox-purple.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  padding-left: 35px;
+}
+
+input:checked + label {
+  background-image: url('../images/checkbox-purple.png');
+}
+
+#search {
+  width: 20%;
+  font-size: 1.3rem;
+  padding: 3px;
+  border-radius: 5px;
+}
+
+#contacts-wrapper {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  margin: 15px 10px 0 10px;
+}
+
+.contact {
+  width: 25%;
+  font-size: 1.3rem;
+}
+
+dl {
+  margin: 10px 0;
+  display: flex;
+}
+
+dt {
+  font-weight: bold;
+}
+
+dd {
+  margin-left: 5px;
+}
+
+.tag:not(:last-of-type)::after {
+  content: ",";
+}
+
+#contact-button-wrapper {
+  width: 100%;
+  display: flex;
+}
+
+#contact-button-wrapper button {
+  width: 40%;
+  margin-right: 15px;
+}
+
+form {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  top: 150px;
+  left: 10%;
+  width: 80%;
+  background-color: rgb(228, 226, 226);
+  border: 1px solid rgb(173, 172, 172);
+  border-radius: 5px;
+  height: 100px;
+  visibility: hidden;
+}
+
+#filter-tags {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  list-style-type: none;
+  width: 75%;
+}
+
+#filter-tags li {
+  width: 30%;
+}
