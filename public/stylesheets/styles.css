@@ -28,7 +28,7 @@ h1 {
   height: 100px;
 }
 
-button, label {
+button, label.checkbox {
   font-size: 1.5rem;
   background-color: transparent;
   color: rgb(111, 84, 153);
@@ -37,7 +37,7 @@ button, label {
   border-radius: 5px;
 }
 
-label {
+label.checkbox {
   background-image: url('../images/empty-checkbox-purple.png');
   background-repeat: no-repeat;
   background-size: contain;
@@ -50,6 +50,9 @@ input:checked + label {
 
 #search {
   width: 20%;
+}
+
+input:not([type="checkbox"]) {
   font-size: 1.3rem;
   padding: 3px;
   border-radius: 5px;
@@ -84,17 +87,17 @@ dd {
   content: ",";
 }
 
-#contact-button-wrapper {
+.button-wrapper {
   width: 100%;
   display: flex;
 }
 
-#contact-button-wrapper button {
+.button-wrapper button {
   width: 40%;
   margin-right: 15px;
 }
 
-form {
+#filter-form {
   position: absolute;
   display: flex;
   align-items: center;
@@ -109,14 +112,84 @@ form {
   visibility: hidden;
 }
 
+ul {
+  list-style-type: none;
+}
+
 #filter-tags {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  list-style-type: none;
   width: 75%;
 }
 
 #filter-tags li {
   width: 30%;
+}
+
+#add-edit-contact {
+  margin: 20px 0;
+  width: 80%;
+  font-size: 1.3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  left: 10%;
+  visibility: hidden;
+}
+
+#contact-inputs {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+}
+
+#add-edit-contact h2 {
+  margin-bottom: 20px;
+}
+
+#contact-inputs li {
+  width: 80%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+#contact-inputs input {
+  width: 65%;
+  margin-left: 15px;
+  margin-bottom: 20px;
+  box-sizing: border-box;
+}
+
+fieldset {
+  width: 65%;
+  margin-left: 15px;
+  border: none;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+#tag-inputs input {
+  margin-left: 0;
+  width: 48%;
+}
+
+#tag-inputs button {
+  width: 48%;
+  height: 35px;
+  font-size: 1.2rem;
+}
+
+#add-edit-contact .button-wrapper {
+  justify-content: space-around;
+  width: 58%;
+  margin-right: 17%;
+  align-self: flex-end;
+}
+
+#add-edit-contact .button-wrapper button {
+  margin: 0;
 }

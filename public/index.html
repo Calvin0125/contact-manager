@@ -19,14 +19,42 @@
     <ul id="filter-tags">
       <li>
         <input id="one" type="checkbox" hidden>
-        <label for="one">Work</label>
+        <label class="checkbox" for="one">Work</label>
       </li>
       <li>
         <input id="two" type="checkbox" hidden>
-        <label for="two">School</label>
+        <label class="checkbox" for="two">School</label>
       </li>
     </ul>
     <button id="submit-filter-form">Filter</button>
+  </form>
+  <form id="add-edit-contact">
+    <h2>Create Contact</h2>
+    <ul id="contact-inputs">
+      <li>
+        <label for="full_name">Full name:</label>
+        <input type="text" id="full_name" name="full_name">
+      </li>
+      <li>
+        <label for="email">Email address:</label>
+        <input type="email" id="email" name="email">
+      </li>
+      <li>
+        <label for="phone_number">Phone number:</label>
+        <input type="tel" id="phone_number" name="phone_number">
+      </li>
+      <li>
+        <p class="legend">Tags:</p>
+          <fieldset id="tag-inputs">
+            <input type="text">
+            <button>New Tag</button>
+          </fieldset>
+      </li>
+    </ul>
+    <div class="button-wrapper">
+      <button>Submit</button>
+      <button>Cancel</button>
+    </div>
   </form>
   <script id="contacts" type="text/x-handlebars">
     <div id="contacts-wrapper">
@@ -51,7 +79,7 @@
               <dd class="tag">None</dd>
             {{/if}}
         </dl>
-        <div id="contact-button-wrapper">
+        <div class="button-wrapper">
           <button class="edit" data-id="{{id}}">Edit</button>
           <button class="delete" data-id="{{id}}">Delete</button>
         </div>
