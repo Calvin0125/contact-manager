@@ -40,15 +40,30 @@ class App {
   constructor() {
     this.renderPage();
     this.bindEvents();
+    this.filterFormTemplate = Handlebars.compile($('#filter-form-template').html());
   }
 
   renderPage() {
     let contactsTemplate = Handlebars.compile($('#contacts').html());
-    $('body').append(contactsTemplate({contacts}));
+    $.get('/api/contacts', (contacts) => {
+      contacts = this.separateTags(contacts);
+      $('body').append(contactsTemplate({contacts}));
+    });
+  }
+
+  separateTags(contacts) {
+    contacts.forEach((contact) => {
+      if (contact.tags) {
+        contact.tags = contact.tags.split(',');
+      }
+    });
+    console.log(contacts);
+    return contacts;
   }
 
   bindEvents() {
     $('#add').on('click', $.proxy(this.handleAddClick, this));
+    $('#filter').on('click', $.proxy(this.handleFilterClick, this));
   }
 
   handleAddClick() {
@@ -56,6 +71,36 @@ class App {
     $('#contacts-wrapper').css('visibility', 'hidden');
     $('#add-edit-contact').css('visibility', 'visible');
     $('#add-edit-contact').animate({'margin-top': '25px'}, 400, 'linear');
+  }
+
+  handleFilterClick() {
+    $.get('api/contacts', (contacts) => {
+      this.loadFilterForm(contacts);
+      $('#filter-form').css('visibility', 'visible');
+      $('#actions').css('visibility', 'hidden');
+    });
+  }
+
+ loadFilterForm(contacts) {
+    let tags = this.getUniqueTags(contacts);
+    console.log(tags);
+    $('body').append(this.filterFormTemplate({tags}));
+  }
+
+  getUniqueTags(contacts) {
+    let uniqueTags = [];
+    contacts.forEach(({tags}) => {
+      if (tags) {
+        tags = tags.split(',');
+        tags.forEach(tag => {
+          if (!uniqueTags.includes(tag)) {
+            uniqueTags.push(tag);
+          }
+        });
+      }
+    });
+
+    return uniqueTags;
   }
 }
 

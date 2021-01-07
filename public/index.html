@@ -15,19 +15,6 @@
     <button id="filter">Filter Contacts</button>
     <input type="text" id="search" placeholder="Search">
   </div>
-  <form id="filter-form">
-    <ul id="filter-tags">
-      <li>
-        <input id="one" type="checkbox" hidden>
-        <label class="checkbox" for="one">Work</label>
-      </li>
-      <li>
-        <input id="two" type="checkbox" hidden>
-        <label class="checkbox" for="two">School</label>
-      </li>
-    </ul>
-    <button id="submit-filter-form">Filter</button>
-  </form>
   <form id="add-edit-contact">
     <h2 id="add-edit-form-title"></h2>
     <ul id="contact-inputs">
@@ -56,6 +43,19 @@
       <button>Cancel</button>
     </div>
   </form>
+  <script id="filter-form-template" type="text/x-handlebars">
+    <form id="filter-form">
+      <ul id="filter-tags">
+        {{#each tags}}
+          <li>
+            <input id="{{@index}}" type="checkbox" hidden>
+            <label class="checkbox" for="{{@index}}">{{this}}</label>
+          </li>
+        {{/each}}
+      </ul>
+      <button id="submit-filter-form">Filter</button>
+    </form>
+  </script>
   <script id="contacts" type="text/x-handlebars">
     <div id="contacts-wrapper">
     {{#each contacts}}
