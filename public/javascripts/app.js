@@ -57,13 +57,13 @@ class App {
         contact.tags = contact.tags.split(',');
       }
     });
-    console.log(contacts);
     return contacts;
   }
 
   bindEvents() {
     $('#add').on('click', $.proxy(this.handleAddClick, this));
     $('#filter').on('click', $.proxy(this.handleFilterClick, this));
+    $('#cancel-contact').on('click', $.proxy(this.handleCancelClick, this));
   }
 
   handleAddClick() {
@@ -101,6 +101,13 @@ class App {
     });
 
     return uniqueTags;
+  }
+
+  handleCancelClick() {
+    $('#add-edit-contact').animate({'margin-top': '-500px'}, 400, 'linear', () => {
+      $('#contacts-wrapper').css('visibility', 'visible');
+      $('#add-edit-contact').css('visibility', 'hidden');
+    });
   }
 }
 
