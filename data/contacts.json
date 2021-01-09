@@ -5,5 +5,12 @@
     "email": "nf@example.com",
     "phone_number": "12345678901",
     "tags": "work,friend"
+  },
+  {
+    "full_name": "Calvin Conley",
+    "phone_number": "1231231232",
+    "email": "calvin@conley.com",
+    "tags": "Me,Myself,I",
+    "id": 2
   }
 ]

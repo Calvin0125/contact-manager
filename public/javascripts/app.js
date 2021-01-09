@@ -64,9 +64,10 @@ class App {
   bindPermanentEvents() {
     $('#add').on('click', $.proxy(this.handleAddClick, this));
     $('#filter').on('click', $.proxy(this.handleFilterClick, this));
-    $('#cancel-contact').on('click', $.proxy(this.handleCancelClick, this));
+    $('#cancel-contact').on('click', $.proxy(this.slideUpFilterForm, this));
     $('#new-tag').on('click', $.proxy(this.addNewTagInput, this));
     $('#tag-inputs').on('click', '.remove-tag', $.proxy(this.removeTagInput, this));
+    $('#submit-new-contact').on('click', $.proxy(this.handleNewContact, this));
   }
 
   bindContactEvents() {
@@ -124,7 +125,7 @@ class App {
     return uniqueTags;
   }
 
-  handleCancelClick() {
+  slideUpFilterForm() {
     $('#add-edit-contact').animate({'margin-top': '-500px'}, 400, 'linear', () => {
       $('#contacts-wrapper').css('visibility', 'visible');
       $('#add-edit-contact').css('visibility', 'hidden');
@@ -136,14 +137,47 @@ class App {
     let tagNumber = $('#tag-inputs input').length;
     let input = $(`<input type="text" name="tag${tagNumber}">`);
     let removeTagButton = $('<button class="remove-tag">Remove Tag</button>');
-    $('#tag-inputs').prepend(removeTagButton);
-    $('#tag-inputs').prepend(input);
+    input.insertBefore($(event.target));
+    removeTagButton.insertBefore($(event.target));
   }
 
   removeTagInput(event) {
     event.preventDefault();
     $(event.target).prev().remove();
     $(event.target).remove();
+  }
+
+  handleNewContact(event) {
+    event.preventDefault();
+    let $form = $('#add-edit-contact');
+    let contact = this.makeContactFromForm($form);
+    new Contact(contact).add();
+    this.slideUpFilterForm();
+    this.reloadContacts();
+  }
+
+  makeContactFromForm($form) {
+    let $contactInputs = $form.find('input:not([name^="tag"])');
+    let $tagInputs = $form.find('input[name^="tag"]');
+    let contact = {};
+
+    $contactInputs.each((_, input) => {
+      contact[input.name] = input.value;
+    });
+
+    contact.tags = this.getCSVTags($tagInputs);
+    return contact;
+  }
+
+  getCSVTags($tagInputs) {
+    let tags = [];
+    $tagInputs.each((_, input) => {
+      if (input.value && !tags.includes(input.value)) {
+        tags.push(input.value);
+      }
+    });
+
+    return tags.join(',');
   }
 }
 
