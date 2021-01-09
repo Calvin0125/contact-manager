@@ -4,7 +4,8 @@ class Contact {
     this.full_name = full_name,
     this.email = email,
     this.phone_number = phone_number,
-    this.tags = this.separateTags(tags);
+    this.tags = tags;
+    this.tagsArray = this.separateTags(tags);
   }
 
   separateTags(tags) {
@@ -14,8 +15,31 @@ class Contact {
 
     return tags;
   }
-}
 
+  add(callback) {
+    $.post('/api/contacts', this, callback);
+  }
+
+  delete(callback) {
+    let id = this.id;
+    $.ajax({
+      method: 'DELETE',
+      url: `/api/contacts/${id}`,
+    })
+      .done(callback);
+  }
+
+  edit(callback) {
+    let self = this;
+    $.ajax({
+      method: 'PUT',
+      url: `/api/contacts/${self.id}`,
+      data: self,
+    })
+      .done(callback);
+  }
+}
+ 
 class App {
   constructor() {
     this.renderPage();
