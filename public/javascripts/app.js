@@ -65,6 +65,8 @@ class App {
     $('#add').on('click', $.proxy(this.handleAddClick, this));
     $('#filter').on('click', $.proxy(this.handleFilterClick, this));
     $('#cancel-contact').on('click', $.proxy(this.handleCancelClick, this));
+    $('#new-tag').on('click', $.proxy(this.addNewTagInput, this));
+    $('#tag-inputs').on('click', '.remove-tag', $.proxy(this.removeTagInput, this));
   }
 
   bindContactEvents() {
@@ -88,7 +90,7 @@ class App {
 
   handleDeleteClick(event) {
     let id = $(event.target).attr('data-id');
-    
+
     $.get(`/api/contacts/${id}`, contact => {
       new Contact(contact).delete();
       this.reloadContacts();
@@ -127,6 +129,21 @@ class App {
       $('#contacts-wrapper').css('visibility', 'visible');
       $('#add-edit-contact').css('visibility', 'hidden');
     });
+  }
+
+  addNewTagInput(event) {
+    event.preventDefault();
+    let tagNumber = $('#tag-inputs input').length;
+    let input = $(`<input type="text" name="tag${tagNumber}">`);
+    let removeTagButton = $('<button class="remove-tag">Remove Tag</button>');
+    $('#tag-inputs').prepend(removeTagButton);
+    $('#tag-inputs').prepend(input);
+  }
+
+  removeTagInput(event) {
+    event.preventDefault();
+    $(event.target).prev().remove();
+    $(event.target).remove();
   }
 }
 
