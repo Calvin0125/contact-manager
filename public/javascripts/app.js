@@ -1,40 +1,20 @@
-let contacts = [
-  {
-    id: 1,
-    full_name: "Donald Duck",
-    email: "donald@duck.com",
-    phone_number: "12345678901",
-    tags: ["work", "school"],
-  },
-  {
-    id: 2,
-    full_name: "Daffy Duck",
-    email: "daffy@duck.com",
-    phone_number: "12345678901",
-    tags: null,
-  },
-  {
-    id: 3,
-    full_name: "Bugs Bunny",
-    email: "bugs@bunny.com",
-    phone_number: "12345678901",
-    tags: ["work", "school", "friend"],
-  },
-  {
-    id: 4,
-    full_name: "Wiley Coyote",
-    email: "wiley@coyote.com",
-    phone_number: "12345678901",
-    tags: null,
-  },
-  {
-    id: 5,
-    full_name: "Tweety Bird",
-    email: "tweety@bird.com",
-    phone_number: "12345678901",
-    tags: null,
+class Contact {
+  constructor({full_name, email, phone_number, tags, id = null}) {
+    this.id = id,
+    this.full_name = full_name,
+    this.email = email,
+    this.phone_number = phone_number,
+    this.tags = this.separateTags(tags);
   }
-];
+
+  separateTags(tags) {
+    if (tags) {
+      tags = tags.split(',');
+    }
+
+    return tags;
+  }
+}
 
 class App {
   constructor() {
@@ -46,18 +26,12 @@ class App {
   renderPage() {
     let contactsTemplate = Handlebars.compile($('#contacts').html());
     $.get('/api/contacts', (contacts) => {
-      contacts = this.separateTags(contacts);
+      contacts = contacts.map((contact) => {
+        return new Contact(contact);
+      });
+      
       $('body').append(contactsTemplate({contacts}));
     });
-  }
-
-  separateTags(contacts) {
-    contacts.forEach((contact) => {
-      if (contact.tags) {
-        contact.tags = contact.tags.split(',');
-      }
-    });
-    return contacts;
   }
 
   bindEvents() {
@@ -89,9 +63,9 @@ class App {
 
   getUniqueTags(contacts) {
     let uniqueTags = [];
-    contacts.forEach(({tags}) => {
+    contacts.forEach(contact => {
+      let tags = new Contact(contact).tags;
       if (tags) {
-        tags = tags.split(',');
         tags.forEach(tag => {
           if (!uniqueTags.includes(tag)) {
             uniqueTags.push(tag);
