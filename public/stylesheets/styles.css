@@ -183,6 +183,7 @@ fieldset {
 #tag-inputs input {
   margin-left: 0;
   width: 48%;
+  margin-bottom: 20px;
 }
 
 #tag-inputs button {
