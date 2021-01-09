@@ -42,26 +42,33 @@ class Contact {
  
 class App {
   constructor() {
-    this.renderPage();
-    this.bindEvents();
+    this.renderContacts();
+
+    // Some events must be bound each time a template is loaded
+    this.bindPermanentEvents();
     this.filterFormTemplate = Handlebars.compile($('#filter-form-template').html());
+    this.contactsTemplate = Handlebars.compile($('#contacts').html());
   }
 
-  renderPage() {
-    let contactsTemplate = Handlebars.compile($('#contacts').html());
+  renderContacts() {
     $.get('/api/contacts', (contacts) => {
       contacts = contacts.map((contact) => {
         return new Contact(contact);
       });
       
-      $('body').append(contactsTemplate({contacts}));
+      $('body').append(this.contactsTemplate({contacts}));
+      this.bindContactEvents();
     });
   }
 
-  bindEvents() {
+  bindPermanentEvents() {
     $('#add').on('click', $.proxy(this.handleAddClick, this));
     $('#filter').on('click', $.proxy(this.handleFilterClick, this));
     $('#cancel-contact').on('click', $.proxy(this.handleCancelClick, this));
+  }
+
+  bindContactEvents() {
+    $('#contacts-wrapper').on('click', '.delete', $.proxy(this.handleDeleteClick, this));
   }
 
   handleAddClick() {
@@ -79,6 +86,20 @@ class App {
     });
   }
 
+  handleDeleteClick(event) {
+    let id = $(event.target).attr('data-id');
+    
+    $.get(`/api/contacts/${id}`, contact => {
+      new Contact(contact).delete();
+      this.reloadContacts();
+    });
+  }
+
+  reloadContacts() {
+    $('#contacts-wrapper').remove();
+    this.renderContacts();
+  }
+
  loadFilterForm(contacts) {
     let tags = this.getUniqueTags(contacts);
     console.log(tags);
@@ -88,7 +109,7 @@ class App {
   getUniqueTags(contacts) {
     let uniqueTags = [];
     contacts.forEach(contact => {
-      let tags = new Contact(contact).tags;
+      let tags = new Contact(contact).tagsArray;
       if (tags) {
         tags.forEach(tag => {
           if (!uniqueTags.includes(tag)) {
