@@ -12,5 +12,19 @@
     "email": "calvin@conley.com",
     "tags": "Me,Myself,I",
     "id": 2
+  },
+  {
+    "full_name": "Hobbes",
+    "phone_number": "1231231232",
+    "email": "hobbes@email.com",
+    "tags": "",
+    "id": 3
+  },
+  {
+    "full_name": "Ritta",
+    "phone_number": "1231231232",
+    "email": "ritta@gmail.com",
+    "tags": "Grandmother,Friend",
+    "id": 4
   }
 ]

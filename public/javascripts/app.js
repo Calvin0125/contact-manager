@@ -64,7 +64,7 @@ class App {
   bindPermanentEvents() {
     $('#add').on('click', $.proxy(this.handleAddClick, this));
     $('#filter').on('click', $.proxy(this.handleFilterClick, this));
-    $('#cancel-contact').on('click', $.proxy(this.slideUpFilterForm, this));
+    $('#cancel-contact').on('click', $.proxy(this.slideUpContactForm, this));
     $('#new-tag').on('click', $.proxy(this.addNewTagInput, this));
     $('#tag-inputs').on('click', '.remove-tag', $.proxy(this.removeTagInput, this));
     $('#submit-new-contact').on('click', $.proxy(this.handleNewContact, this));
@@ -125,7 +125,7 @@ class App {
     return uniqueTags;
   }
 
-  slideUpFilterForm() {
+  slideUpContactForm() {
     $('#add-edit-contact').animate({'margin-top': '-500px'}, 400, 'linear', () => {
       $('#contacts-wrapper').css('visibility', 'visible');
       $('#add-edit-contact').css('visibility', 'hidden');
@@ -151,8 +151,9 @@ class App {
     event.preventDefault();
     let $form = $('#add-edit-contact');
     let contact = this.makeContactFromForm($form);
+    this.resetContactForm($form);
     new Contact(contact).add();
-    this.slideUpFilterForm();
+    this.slideUpContactForm();
     this.reloadContacts();
   }
 
@@ -178,6 +179,11 @@ class App {
     });
 
     return tags.join(',');
+  }
+
+  resetContactForm($form) {
+    $form.find('#tag-inputs *:not(#new-tag)').remove();
+    $form[0].reset();
   }
 }
 
