@@ -162,12 +162,12 @@ ul {
   display: flex;
   justify-content: flex-end;
   width: 80%;
+  margin-bottom: 20px;
 }
 
 #contact-inputs input {
   box-sizing: border-box;
   margin-left: 15px;
-  margin-bottom: 20px;
   width: 65%;
 }
 
