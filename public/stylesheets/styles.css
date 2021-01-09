@@ -73,6 +73,7 @@ input:not([type="checkbox"]) {
 .contact {
   font-size: 1.3rem;
   width: 33%;
+  min-width: 300px;
   margin-bottom: 20px;
 }
 
