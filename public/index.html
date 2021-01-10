@@ -39,11 +39,12 @@
     </ul>
     <div class="button-wrapper">
       <button id="submit-new-contact">Submit</button>
+      <button id="submit-edit-contact">Submit</button>
       <button id="cancel-contact">Cancel</button>
     </div>
   </form>
   <script id="filter-form-template" type="text/x-handlebars">
-    <form id="filter-form">
+    <form id="filter-form" class="hide">
       <ul id="filter-tags">
         {{#each tags}}
           <li>

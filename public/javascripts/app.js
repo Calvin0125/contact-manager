@@ -64,18 +64,26 @@ class App {
   bindPermanentEvents() {
     $('#add').on('click', $.proxy(this.handleAddClick, this));
     $('#filter').on('click', $.proxy(this.handleFilterClick, this));
-    $('#cancel-contact').on('click', $.proxy(this.slideUpContactForm, this));
-    $('#new-tag').on('click', $.proxy(this.addNewTagInput, this));
+    $('#cancel-contact').on('click', $.proxy(this.handleCancelClick, this));
+    $('#new-tag').on('click', $.proxy(this.handleNewTagClick, this));
     $('#tag-inputs').on('click', '.remove-tag', $.proxy(this.removeTagInput, this));
     $('#submit-new-contact').on('click', $.proxy(this.handleNewContact, this));
+    $('#submit-edit-contact').on('click', $.proxy(this.handleSubmitEdit, this));
   }
 
   bindContactEvents() {
     $('#contacts-wrapper').on('click', '.delete', $.proxy(this.handleDeleteClick, this));
+    $('#contacts-wrapper').on('click', '.edit', $.proxy(this.handleEditClick, this));
   }
 
   handleAddClick() {
     $('#add-edit-form-title').text('Create Contact');
+    $('#submit-edit-contact').hide();
+    $('#submit-new-contact').show();
+    this.slideDownContactForm();
+  }
+
+  slideDownContactForm() {
     $('#contacts-wrapper').css('visibility', 'hidden');
     $('#add-edit-contact').css('visibility', 'visible');
     $('#add-edit-contact').animate({'margin-top': '25px'}, 400, 'linear');
@@ -84,9 +92,14 @@ class App {
   handleFilterClick() {
     $.get('api/contacts', (contacts) => {
       this.loadFilterForm(contacts);
-      $('#filter-form').css('visibility', 'visible');
-      $('#actions').css('visibility', 'hidden');
+      $('#actions').addClass('hide');
+      $('#filter-form').removeClass('hide');
     });
+  }
+
+  loadFilterForm(contacts) {
+    let tags = this.getUniqueTags(contacts);
+    $(this.filterFormTemplate({tags})).insertAfter('#actions');
   }
 
   handleDeleteClick(event) {
@@ -103,10 +116,37 @@ class App {
     this.renderContacts();
   }
 
- loadFilterForm(contacts) {
-    let tags = this.getUniqueTags(contacts);
-    console.log(tags);
-    $('body').append(this.filterFormTemplate({tags}));
+  handleEditClick(event) {
+    let id = $(event.target).attr('data-id');
+    $('#add-edit-form-title').text('Edit Contact');
+    $('#submit-new-contact').hide();
+    $('#submit-edit-contact').show();
+    this.slideDownContactForm();
+    $.get(`api/contacts/${id}`, contact => {
+      contact = new Contact(contact);
+      this.populateEditForm(contact);
+    });
+  }
+
+  populateEditForm(contact) {
+    $('#full_name').val(contact['full_name']);
+    $('#email').val(contact['email']);
+    $('#phone_number').val(contact['phone_number']);
+    $('#submit-edit-contact').attr('data-id', contact['id']);
+    if (contact.tags) {
+      this.populateTags(contact.tagsArray);
+    }
+}
+
+  populateTags(tags) {
+    tags.forEach(tag => {
+      this.addNewTagInput(tag);
+    }, this);
+  }
+  
+  handleSubmitEdit(event) {
+    event.preventDefault();
+    this.addOrEditContact('edit');
   }
 
   getUniqueTags(contacts) {
@@ -125,20 +165,37 @@ class App {
     return uniqueTags;
   }
 
-  slideUpContactForm() {
+  handleCancelClick(event) {
+    event.preventDefault();
+    this.slideUpContactForm();
+  }
+
+  slideUpContactForm(callback = null) {
     $('#add-edit-contact').animate({'margin-top': '-500px'}, 400, 'linear', () => {
       $('#contacts-wrapper').css('visibility', 'visible');
       $('#add-edit-contact').css('visibility', 'hidden');
+
+      if (callback) {
+        callback();
+      }
     });
   }
 
-  addNewTagInput(event) {
+  handleNewTagClick(event) {
     event.preventDefault();
+    this.addNewTagInput();
+  }
+
+  addNewTagInput(tag = null) {
     let tagNumber = $('#tag-inputs input').length;
-    let input = $(`<input type="text" name="tag${tagNumber}">`);
-    let removeTagButton = $('<button class="remove-tag">Remove Tag</button>');
-    input.insertBefore($(event.target));
-    removeTagButton.insertBefore($(event.target));
+    let $input = $(`<input type="text" name="tag${tagNumber}">`);
+    let $removeTagButton = $('<button class="remove-tag">Remove Tag</button>');
+    let $newTagButton = $('#new-tag');
+    $input.insertBefore($newTagButton);
+    $removeTagButton.insertBefore($newTagButton);
+    if (tag) {
+      $input.val(tag);
+    }
   }
 
   removeTagInput(event) {
@@ -149,18 +206,31 @@ class App {
 
   handleNewContact(event) {
     event.preventDefault();
+    this.addOrEditContact('add');
+  }
+
+  addOrEditContact(action) {
     let $form = $('#add-edit-contact');
     let contact = this.makeContactFromForm($form);
-    this.resetContactForm($form);
-    new Contact(contact).add();
-    this.slideUpContactForm();
-    this.reloadContacts();
+    if (action === 'add') {
+      new Contact(contact).add();
+    } else if (action === 'edit') {
+      new Contact(contact).edit();
+    }
+
+    this.slideUpContactForm(() => {
+      this.resetContactForm($form);
+      this.reloadContacts();
+    });
   }
 
   makeContactFromForm($form) {
     let $contactInputs = $form.find('input:not([name^="tag"])');
     let $tagInputs = $form.find('input[name^="tag"]');
     let contact = {};
+    if ($('#submit-edit-contact').is(':visible')) {
+      contact.id = $('#submit-edit-contact').attr('data-id');
+    }
 
     $contactInputs.each((_, input) => {
       contact[input.name] = input.value;

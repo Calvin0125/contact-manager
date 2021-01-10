@@ -2,15 +2,15 @@
   {
     "id": 1,
     "full_name": "Naveed Fida",
-    "email": "nf@example.com",
+    "email": "nf@example5.com",
     "phone_number": "12345678901",
     "tags": "work,friend"
   },
   {
     "full_name": "Calvin Conley",
     "phone_number": "1231231232",
-    "email": "calvin@conley.com",
-    "tags": "Me,Myself,I",
+    "email": "calvin@conley25.com",
+    "tags": "Myself,I",
     "id": 2
   },
   {
@@ -26,5 +26,33 @@
     "email": "ritta@gmail.com",
     "tags": "Grandmother,Friend",
     "id": 4
+  },
+  {
+    "full_name": "Daffy Duck",
+    "phone_number": "1231231232",
+    "email": "daffy@duck.com",
+    "tags": "cartoons",
+    "id": 5
+  },
+  {
+    "full_name": "Donald Duck",
+    "phone_number": "1231231232",
+    "email": "donald@ducky.com",
+    "tags": "cartoons,ducks,animals",
+    "id": 6
+  },
+  {
+    "full_name": "Bugs Bunny",
+    "phone_number": "1231231232",
+    "email": "bugs@bunny.net",
+    "tags": "cartoons",
+    "id": 7
+  },
+  {
+    "full_name": "Rick Sanchez",
+    "phone_number": "1231231232",
+    "email": "rick@sanchez.com",
+    "tags": "cartoons",
+    "id": 8
   }
 ]
