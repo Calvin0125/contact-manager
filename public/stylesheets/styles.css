@@ -64,7 +64,7 @@ input:not([type="checkbox"]) {
 
 #contacts-wrapper {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   flex-wrap: wrap;
   margin: 15px auto 0 auto;
   width: 80%;
@@ -72,7 +72,7 @@ input:not([type="checkbox"]) {
 
 .contact {
   font-size: 1.3rem;
-  min-width: 300px;
+  width: 300px;
   margin-bottom: 20px;
 }
 
@@ -103,18 +103,19 @@ dd {
   width: 40%;
 }
 
+#edit-contact {
+  visibility: hidden;
+}
+
 #filter-form {
   align-items: center;
   background-color: rgb(228, 226, 226);
   border: 1px solid rgb(173, 172, 172);
   border-radius: 5px;
   display: flex;
-  height: 100px;
+  min-height: 100px;
   justify-content: space-around;
-  left: 10%;
-  position: absolute;
-  top: 150px;
-  visibility: hidden;
+  margin: auto;
   width: 80%;
 }
 
@@ -125,12 +126,15 @@ ul {
 #filter-tags {
   align-items: center;
   display: flex;
-  justify-content: space-around;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  margin-top: 15px;
   width: 75%;
 }
 
 #filter-tags li {
-  width: 30%;
+  margin-bottom: 15px;
+  width: 175px;
 }
 
 #add-edit-contact {
@@ -201,4 +205,8 @@ fieldset {
 
 #add-edit-contact .button-wrapper button {
   margin: 0;
+}
+
+.hide {
+  display: none !important;
 }
