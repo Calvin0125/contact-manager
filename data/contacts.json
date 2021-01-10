@@ -10,21 +10,14 @@
     "full_name": "Hobbes",
     "phone_number": "1231231232",
     "email": "hobbes@email.com",
-    "tags": "tiger",
+    "tags": "tiger,cartoons",
     "id": 3
-  },
-  {
-    "full_name": "Daffy Duck",
-    "phone_number": "1231231232",
-    "email": "daffy@duck25.com",
-    "tags": "cartoon,duck",
-    "id": 5
   },
   {
     "full_name": "Superman",
     "phone_number": "1231231232",
     "email": "Superman@hero.com",
-    "tags": "superhero",
+    "tags": "superhero,marvel",
     "id": 6
   },
   {

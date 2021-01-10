@@ -52,6 +52,10 @@ class ContactList {
       });
 
       $('body').append(this.contactsTemplate({contacts}));
+      if ($('#search').val()) {
+        this.filterContactsByName($('#search').val());
+      }
+
       this.app.bindContactEvents();
     });
   }
@@ -297,6 +301,15 @@ class App {
   handleSubmitEdit(event) {
     event.preventDefault();
     let $form = $('#add-edit-contact');
+    
+    if ($form.find('input:invalid').length > 0) {
+      $form.find('input:invalid').each((_, input) => {
+        let message = this.getErrorMessage(input);
+        this.showErrorMessage($(input), message);
+      });
+      return;
+    }
+
     this.contactList.edit($form);
     this.slideUpContactForm(() => {
       this.contactList.reloadContacts();
@@ -348,6 +361,15 @@ class App {
   handleSubmitNewContact(event) {
     event.preventDefault();
     let $form = $('#add-edit-contact');
+
+    if ($form.find('input:invalid').length > 0) {
+      $form.find('input:invalid').each((_, input) => {
+        let message = this.getErrorMessage(input);
+        this.showErrorMessage($(input), message);
+      });
+      return;
+    }
+
     this.contactList.add($form);
     this.slideUpContactForm(() => {
       this.contactList.reloadContacts();
@@ -356,7 +378,11 @@ class App {
 
   resetContactForm() {
     let $form = $('#add-edit-contact');
-    $form.find('#tag-inputs *:not(#new-tag)').remove();
+    $form.find('#tag-inputs *:not(#new-tag), #tag-inputs p').remove();
+    $form.find('input').each((_, input) => {
+      this.removeErrorMessage($(input));
+    });
+
     $form[0].reset();
   }
 
@@ -370,7 +396,7 @@ class App {
   }
 
   removeErrorMessage($input) {
-    $input.css('border', '1px solid blue');
+    $input.css('border', '1px solid black');
     $input.prev().css('color', 'black');
     $input.nextAll('.message').eq(0).text('').hide();
   }
