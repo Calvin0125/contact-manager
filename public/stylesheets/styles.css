@@ -29,6 +29,7 @@ h1 {
   margin: auto;
   position: relative;
   width: 80%;
+  min-width: 480px;
   z-index: 5;
 }
 
@@ -39,6 +40,10 @@ button, label.checkbox {
   font-size: 1.5rem;
   height: 60px;
   width: 20%;
+}
+
+#add, #filter {
+  min-width: 115px;
 }
 
 label.checkbox {
