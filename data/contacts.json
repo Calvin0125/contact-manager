@@ -16,7 +16,7 @@
   {
     "full_name": "Daffy Duck",
     "phone_number": "1231231232",
-    "email": "daffy@duck.com",
+    "email": "daffy@duck25.com",
     "tags": "cartoon,duck",
     "id": 5
   },
@@ -31,7 +31,14 @@
     "full_name": "Donald Duck",
     "phone_number": "1231231232",
     "email": "Donald@duck.com",
-    "tags": "",
+    "tags": "duck",
     "id": 7
+  },
+  {
+    "full_name": "Bugs Bunny",
+    "phone_number": "1231231232",
+    "email": "bugs@bunny.com",
+    "tags": "bunny,cartoons",
+    "id": 8
   }
 ]

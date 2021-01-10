@@ -47,17 +47,20 @@
     <form id="filter-form">
       <ul id="filter-tags">
           <li>
-            <input id="no-tags" type="checkbox" hidden checked>
+            <input id="no-tags" type="checkbox" hidden>
             <label class="checkbox" for="no-tags">no tags</label>
           </li>
         {{#each tags}}
           <li>
-            <input id="{{@index}}" type="checkbox" hidden checked>
+            <input id="{{@index}}" type="checkbox" hidden>
             <label class="checkbox" for="{{@index}}">{{this}}</label>
           </li>
         {{/each}}
       </ul>
-      <button id="submit-filter-form">Filter</button>
+      <div id="filter-buttons-wrapper">
+        <button id="submit-filter-form">Filter</button>
+        <button id="show-all">Show All</button>
+      </div>
     </form>
   </script>
   <script id="contacts" type="text/x-handlebars">

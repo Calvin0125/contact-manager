@@ -137,6 +137,17 @@ class ContactList {
     return result;
   }
 
+  filterContactsByName(string) {
+    $('.contact').each((_, contact) => {
+      let contactName = $(contact).find('h2').text().toLowerCase();
+      if (contactName.includes(string)) {
+        $(contact).show();
+      } else {
+        $(contact).hide();
+      }
+    });
+  }
+
   add($form) {
     let contact = this.makeContactFromForm($form);
     contact.add();
@@ -181,7 +192,7 @@ class App {
 
     // Some events must be bound each time a template is loaded
     this.bindPermanentEvents();
-    this.renderContacts();
+    this.contactList.renderContacts();
     this.filterFormTemplate = Handlebars.compile($('#filter-form-template').html());
   }
 
@@ -193,10 +204,8 @@ class App {
     $('#tag-inputs').on('click', '.remove-tag', $.proxy(this.removeTagInput, this));
     $('#submit-new-contact').on('click', $.proxy(this.handleSubmitNewContact, this));
     $('#submit-edit-contact').on('click', $.proxy(this.handleSubmitEdit, this));
-  }
-
-  renderContacts() {
-    this.contactList.renderContacts();
+    $('#search').on('keyup', $.proxy(this.handleSearch, this));
+    $('#show-all').on('click', $.proxy(this.handleShowAllClick, this));
   }
 
   bindContactEvents() {
@@ -337,6 +346,16 @@ class App {
     let $form = $('#add-edit-contact');
     $form.find('#tag-inputs *:not(#new-tag)').remove();
     $form[0].reset();
+  }
+
+  handleSearch(event) {
+    let searchString = $(event.target).val().toLowerCase();
+    this.contactList.filterContactsByName(searchString);
+  }
+
+  handleShowAllClick(event) {
+    event.preventDefault();
+    this.contactList.reloadContacts();
   }
 }
 
