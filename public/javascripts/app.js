@@ -16,38 +16,33 @@ class Contact {
     return tags;
   }
 
-  add(callback) {
-    $.post('/api/contacts', this, callback);
+  add() {
+    $.post('/api/contacts', this);
   }
 
-  delete(callback) {
+  delete() {
     let id = this.id;
     $.ajax({
       method: 'DELETE',
       url: `/api/contacts/${id}`,
-    })
-      .done(callback);
+    });
   }
 
-  edit(callback) {
+  edit() {
+    let id = this.id;
     let self = this;
     $.ajax({
       method: 'PUT',
-      url: `/api/contacts/${self.id}`,
+      url: `/api/contacts/${id}`,
       data: self,
-    })
-      .done(callback);
+    });
   }
 }
- 
-class App {
-  constructor() {
-    this.renderContacts();
 
-    // Some events must be bound each time a template is loaded
-    this.bindPermanentEvents();
-    this.filterFormTemplate = Handlebars.compile($('#filter-form-template').html());
+class ContactList {
+  constructor(app) {
     this.contactsTemplate = Handlebars.compile($('#contacts').html());
+    this.app = app
   }
 
   renderContacts() {
@@ -57,8 +52,104 @@ class App {
       });
       
       $('body').append(this.contactsTemplate({contacts}));
-      this.bindContactEvents();
+      this.app.bindContactEvents();
     });
+  }
+
+  get(id, callback) {
+    $.get(`/api/contacts/${id}`, contact => {
+      contact = new Contact(contact);
+      callback(contact);
+    });
+  }
+
+  getAll(callback) {
+    $.get('/api/contacts', contacts => {
+      callback(contacts);
+    });
+  }
+
+  delete(id) {
+    this.get(id, contact => {
+      contact.delete();
+      this.reloadContacts();
+    });
+  }
+
+  reloadContacts() {
+    $('#contacts-wrapper').remove();
+    this.renderContacts();
+  }
+
+  getUniqueTags(callback) {
+    this.getAll((contacts) => {
+      let uniqueTags = this.filterContactsForUniqueTags(contacts);
+      callback(uniqueTags);
+    });
+  }
+
+  filterContactsForUniqueTags(contacts) {
+    let uniqueTags = [];
+      contacts.forEach(contact => {
+        let tags = new Contact(contact).tagsArray;
+        if (tags) {
+          tags.forEach(tag => {
+            if (!uniqueTags.includes(tag)) {
+              uniqueTags.push(tag);
+            }
+          });
+        }
+      });
+
+    return uniqueTags;
+  }
+
+  add($form) {
+    let contact = this.makeContactFromForm($form);
+    contact.add();
+  }
+
+  edit($form) {
+    let contact = this.makeContactFromForm($form);
+    contact.edit()
+  }
+
+  makeContactFromForm($form) {
+    let $contactInputs = $form.find('input:not([name^="tag"])');
+    let $tagInputs = $form.find('input[name^="tag"]');
+    let contact = {};
+    if ($('#submit-edit-contact').is(':visible')) {
+      contact.id = $('#submit-edit-contact').attr('data-id');
+    }
+
+    $contactInputs.each((_, input) => {
+      contact[input.name] = input.value;
+    });
+
+    contact.tags = this.getCSVTags($tagInputs);
+    return new Contact(contact);
+  }
+
+  getCSVTags($tagInputs) {
+    let tags = [];
+    $tagInputs.each((_, input) => {
+      if (input.value && !tags.includes(input.value)) {
+        tags.push(input.value);
+      }
+    });
+
+    return tags.join(',');
+  }
+}
+ 
+class App {
+  constructor() {
+    this.contactList = new ContactList(this);
+
+    // Some events must be bound each time a template is loaded
+    this.bindPermanentEvents();
+    this.renderContacts();
+    this.filterFormTemplate = Handlebars.compile($('#filter-form-template').html());
   }
 
   bindPermanentEvents() {
@@ -67,8 +158,12 @@ class App {
     $('#cancel-contact').on('click', $.proxy(this.handleCancelClick, this));
     $('#new-tag').on('click', $.proxy(this.handleNewTagClick, this));
     $('#tag-inputs').on('click', '.remove-tag', $.proxy(this.removeTagInput, this));
-    $('#submit-new-contact').on('click', $.proxy(this.handleNewContact, this));
+    $('#submit-new-contact').on('click', $.proxy(this.handleSubmitNewContact, this));
     $('#submit-edit-contact').on('click', $.proxy(this.handleSubmitEdit, this));
+  }
+
+  renderContacts() {
+    this.contactList.renderContacts();
   }
 
   bindContactEvents() {
@@ -89,31 +184,9 @@ class App {
     $('#add-edit-contact').animate({'margin-top': '25px'}, 400, 'linear');
   }
 
-  handleFilterClick() {
-    $.get('api/contacts', (contacts) => {
-      this.loadFilterForm(contacts);
-      $('#actions').addClass('hide');
-      $('#filter-form').removeClass('hide');
-    });
-  }
-
-  loadFilterForm(contacts) {
-    let tags = this.getUniqueTags(contacts);
-    $(this.filterFormTemplate({tags})).insertAfter('#actions');
-  }
-
   handleDeleteClick(event) {
     let id = $(event.target).attr('data-id');
-
-    $.get(`/api/contacts/${id}`, contact => {
-      new Contact(contact).delete();
-      this.reloadContacts();
-    });
-  }
-
-  reloadContacts() {
-    $('#contacts-wrapper').remove();
-    this.renderContacts();
+    this.contactList.delete(id);
   }
 
   handleEditClick(event) {
@@ -122,8 +195,7 @@ class App {
     $('#submit-new-contact').hide();
     $('#submit-edit-contact').show();
     this.slideDownContactForm();
-    $.get(`api/contacts/${id}`, contact => {
-      contact = new Contact(contact);
+    this.contactList.get(id, contact => {
       this.populateEditForm(contact);
     });
   }
@@ -136,33 +208,29 @@ class App {
     if (contact.tags) {
       this.populateTags(contact.tagsArray);
     }
-}
+  }
 
   populateTags(tags) {
     tags.forEach(tag => {
       this.addNewTagInput(tag);
     }, this);
   }
+
+  handleFilterClick() {
+    this.contactList.getUniqueTags(tags => {
+      $(this.filterFormTemplate({tags})).insertAfter('#actions');
+      $('#actions').addClass('hide');
+      $('#filter-form').removeClass('hide');
+    });
+  }
   
   handleSubmitEdit(event) {
     event.preventDefault();
-    this.addOrEditContact('edit');
-  }
-
-  getUniqueTags(contacts) {
-    let uniqueTags = [];
-    contacts.forEach(contact => {
-      let tags = new Contact(contact).tagsArray;
-      if (tags) {
-        tags.forEach(tag => {
-          if (!uniqueTags.includes(tag)) {
-            uniqueTags.push(tag);
-          }
-        });
-      }
+    let $form = $('#add-edit-contact');
+    this.contactList.edit($form);
+    this.slideUpContactForm(() => {
+      this.contactList.reloadContacts();
     });
-
-    return uniqueTags;
   }
 
   handleCancelClick(event) {
@@ -174,6 +242,7 @@ class App {
     $('#add-edit-contact').animate({'margin-top': '-500px'}, 400, 'linear', () => {
       $('#contacts-wrapper').css('visibility', 'visible');
       $('#add-edit-contact').css('visibility', 'hidden');
+      this.resetContactForm();
 
       if (callback) {
         callback();
@@ -204,54 +273,17 @@ class App {
     $(event.target).remove();
   }
 
-  handleNewContact(event) {
+  handleSubmitNewContact(event) {
     event.preventDefault();
-    this.addOrEditContact('add');
-  }
-
-  addOrEditContact(action) {
     let $form = $('#add-edit-contact');
-    let contact = this.makeContactFromForm($form);
-    if (action === 'add') {
-      new Contact(contact).add();
-    } else if (action === 'edit') {
-      new Contact(contact).edit();
-    }
-
+    this.contactList.add($form);
     this.slideUpContactForm(() => {
-      this.resetContactForm($form);
-      this.reloadContacts();
+      this.contactList.reloadContacts();
     });
   }
 
-  makeContactFromForm($form) {
-    let $contactInputs = $form.find('input:not([name^="tag"])');
-    let $tagInputs = $form.find('input[name^="tag"]');
-    let contact = {};
-    if ($('#submit-edit-contact').is(':visible')) {
-      contact.id = $('#submit-edit-contact').attr('data-id');
-    }
-
-    $contactInputs.each((_, input) => {
-      contact[input.name] = input.value;
-    });
-
-    contact.tags = this.getCSVTags($tagInputs);
-    return contact;
-  }
-
-  getCSVTags($tagInputs) {
-    let tags = [];
-    $tagInputs.each((_, input) => {
-      if (input.value && !tags.includes(input.value)) {
-        tags.push(input.value);
-      }
-    });
-
-    return tags.join(',');
-  }
-
-  resetContactForm($form) {
+  resetContactForm() {
+    let $form = $('#add-edit-contact');
     $form.find('#tag-inputs *:not(#new-tag)').remove();
     $form[0].reset();
   }
