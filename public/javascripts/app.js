@@ -205,7 +205,6 @@ class App {
     $('#submit-new-contact').on('click', $.proxy(this.handleSubmitNewContact, this));
     $('#submit-edit-contact').on('click', $.proxy(this.handleSubmitEdit, this));
     $('#search').on('keyup', $.proxy(this.handleSearch, this));
-    $('#show-all').on('click', $.proxy(this.handleShowAllClick, this));
   }
 
   bindContactEvents() {
@@ -263,6 +262,7 @@ class App {
       $(this.filterFormTemplate({tags})).insertAfter('#actions');
       $('#actions').addClass('hide');
       $('#submit-filter-form').on('click', $.proxy(this.handleFilterSubmit, this));
+      $('#show-all').on('click', $.proxy(this.handleShowAllClick, this));
     });
   }
 
@@ -282,6 +282,13 @@ class App {
     });
 
     return tags;
+  }
+
+  handleShowAllClick(event) {
+    event.preventDefault();
+    this.contactList.reloadContacts();
+    $('#filter-form').remove();
+    $('#actions').removeClass('hide');
   }
   
   handleSubmitEdit(event) {
@@ -317,7 +324,7 @@ class App {
 
   addNewTagInput(tag = null) {
     let tagNumber = $('#tag-inputs input').length;
-    let $input = $(`<input type="text" name="tag${tagNumber}">`);
+    let $input = $(`<input type="text" name="tag${tagNumber}" maxlength="12">`);
     let $removeTagButton = $('<button class="remove-tag">Remove Tag</button>');
     let $newTagButton = $('#new-tag');
     $input.insertBefore($newTagButton);
@@ -351,11 +358,6 @@ class App {
   handleSearch(event) {
     let searchString = $(event.target).val().toLowerCase();
     this.contactList.filterContactsByName(searchString);
-  }
-
-  handleShowAllClick(event) {
-    event.preventDefault();
-    this.contactList.reloadContacts();
   }
 }
 
