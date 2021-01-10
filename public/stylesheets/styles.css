@@ -18,6 +18,10 @@ h1 {
   z-index: 5;
 }
 
+input {
+  border: 1px solid black;
+}
+
 #actions {
   align-items: center;
   background-color: rgb(228, 226, 226);
@@ -179,8 +183,17 @@ ul {
 #contact-inputs li {
   display: flex;
   justify-content: flex-end;
+  flex-wrap: wrap;
   width: 80%;
   margin-bottom: 20px;
+}
+
+.message {
+  width: 65%;
+  margin-top: 10px;
+  display: none;
+  color: rgb(185, 74, 72);
+  font-size: 0.9rem;
 }
 
 #contact-inputs input {
@@ -202,6 +215,12 @@ fieldset {
   margin-left: 0;
   width: 48%;
   margin-bottom: 20px;
+}
+
+#tag-inputs .message {
+  width: 100%;
+  margin-top: 0;
+  margin-bottom: 15px;
 }
 
 #tag-inputs button {

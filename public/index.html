@@ -21,14 +21,17 @@
       <li>
         <label for="full_name">Full name:</label>
         <input type="text" id="full_name" name="full_name" required>
+        <p class="message"></p>
       </li>
       <li>
         <label for="email">Email address:</label>
         <input type="email" id="email" name="email" required>
+        <p class="message"></p>
       </li>
       <li>
         <label for="phone_number">Phone number:</label>
-        <input type="tel" id="phone_number" name="phone_number" maxlength="11" pattern="[0-9]+" required>
+        <input type="tel" id="phone_number" name="phone_number" minlength = "10" maxlength="11" pattern="[0-9]+" required>
+        <p class="message"></p>
       </li>
       <li>
         <p class="legend">Tags:</p>

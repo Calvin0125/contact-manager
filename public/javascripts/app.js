@@ -205,6 +205,9 @@ class App {
     $('#submit-new-contact').on('click', $.proxy(this.handleSubmitNewContact, this));
     $('#submit-edit-contact').on('click', $.proxy(this.handleSubmitEdit, this));
     $('#search').on('keyup', $.proxy(this.handleSearch, this));
+    $('#add-edit-contact').on('focusin', 'input', $.proxy(this.handleInputFocusIn, this));
+    $('#add-edit-contact').on('focusout', 'input', $.proxy(this.handleInputFocusOut, this));
+    $('#add-edit-contact').on('keydown', 'input', $.proxy(this.handleContactInputKeydown, this));
   }
 
   bindContactEvents() {
@@ -326,9 +329,11 @@ class App {
     let tagNumber = $('#tag-inputs input').length;
     let $input = $(`<input type="text" name="tag${tagNumber}" maxlength="12">`);
     let $removeTagButton = $('<button class="remove-tag">Remove Tag</button>');
+    let $message = $('<p class="message"></p>');
     let $newTagButton = $('#new-tag');
     $input.insertBefore($newTagButton);
     $removeTagButton.insertBefore($newTagButton);
+    $message.insertBefore($newTagButton);
     if (tag) {
       $input.val(tag);
     }
@@ -358,6 +363,59 @@ class App {
   handleSearch(event) {
     let searchString = $(event.target).val().toLowerCase();
     this.contactList.filterContactsByName(searchString);
+  }
+
+  handleInputFocusIn(event) {
+    this.removeErrorMessage($(event.target));
+  }
+
+  removeErrorMessage($input) {
+    $input.css('border', '1px solid blue');
+    $input.prev().css('color', 'black');
+    $input.nextAll('.message').eq(0).text('').hide();
+  }
+
+  handleInputFocusOut(event) {
+    let input = event.target;
+    if (input.validity.valid) {
+      this.removeErrorMessage($(input));
+    } else {
+      let message = this.getErrorMessage(input);
+      this.showErrorMessage($(input), message);
+    }
+  }
+
+  getErrorMessage(input) {
+    let message;
+
+    if (input.type === 'tel' && input.validity.patternMismatch) {
+      message = "Please enter only numbers.";
+    } else if (input.type === 'tel' && input.validity.tooShort) {
+      message = "Please enter 10 or 11 digits."
+    } else {
+      message = input.validationMessage;
+    }
+
+    return message;
+  }
+
+  showErrorMessage($input, message) {
+    $input.css('border', '1px solid rgb(185, 74, 72)');
+    $input.prev().css('color', 'rgb(185, 74, 72)');
+    $input.nextAll('.message').eq(0).text(message).show();
+  }
+
+  handleContactInputKeydown(event) {
+    let input = event.target;
+
+    // the key code for backspace is 8
+    if (($(input).val().length === +input.maxLength) &&
+        (event.which !== 8)) {
+      let message = `Please enter a maximum of ${input.maxLength} characters`;
+      this.showErrorMessage($(input), message);
+    } else {
+      this.removeErrorMessage($(input));
+    }
   }
 }
 
