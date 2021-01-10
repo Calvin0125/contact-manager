@@ -42,7 +42,7 @@ class Contact {
 class ContactList {
   constructor(app) {
     this.contactsTemplate = Handlebars.compile($('#contacts').html());
-    this.app = app
+    this.app = app;
   }
 
   renderContacts() {
@@ -50,7 +50,7 @@ class ContactList {
       contacts = contacts.map((contact) => {
         return new Contact(contact);
       });
-      
+
       $('body').append(this.contactsTemplate({contacts}));
       this.app.bindContactEvents();
     });
@@ -94,6 +94,7 @@ class ContactList {
         let tags = new Contact(contact).tagsArray;
         if (tags) {
           tags.forEach(tag => {
+            tag = tag.toLowerCase();
             if (!uniqueTags.includes(tag)) {
               uniqueTags.push(tag);
             }
@@ -102,6 +103,38 @@ class ContactList {
       });
 
     return uniqueTags;
+  }
+
+  filterContactsByTags(tags) {
+    $('.contact').each((_, contact) => {
+      let contactTags = this.getTagsFromContactElement(contact);
+      if (this.hasCommonElement(tags, contactTags)) {
+        $(contact).show();
+      } else {
+        $(contact).hide();
+      }
+    });
+  }
+
+  getTagsFromContactElement(contact) {
+    let $contactTagElements = $(contact).find('dd.tag');
+    let contactTags = [];
+    $contactTagElements.each((_, tagElement) => {
+      contactTags.push($(tagElement).text().toLowerCase());
+    });
+
+    return contactTags;
+  }
+
+  hasCommonElement(array1, array2) {
+    let result = false;
+    array1.forEach(elem => {
+      if (array2.includes(elem)) {
+        result = true;
+      }
+    });
+
+    return result;
   }
 
   add($form) {
@@ -220,8 +253,26 @@ class App {
     this.contactList.getUniqueTags(tags => {
       $(this.filterFormTemplate({tags})).insertAfter('#actions');
       $('#actions').addClass('hide');
-      $('#filter-form').removeClass('hide');
+      $('#submit-filter-form').on('click', $.proxy(this.handleFilterSubmit, this));
     });
+  }
+
+  handleFilterSubmit(event) {
+    event.preventDefault();
+    let tags = this.getCheckedTags();
+    this.contactList.filterContactsByTags(tags);
+    $('#filter-form').remove();
+    $('#actions').removeClass('hide');
+  }
+
+  getCheckedTags() {
+    let $tagElements = $('#filter-form').find('input:checked + label');
+    let tags = [];
+    $tagElements.each((_, tag) => {
+      tags.push($(tag).text());
+    });
+
+    return tags;
   }
   
   handleSubmitEdit(event) {

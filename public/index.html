@@ -44,11 +44,15 @@
     </div>
   </form>
   <script id="filter-form-template" type="text/x-handlebars">
-    <form id="filter-form" class="hide">
+    <form id="filter-form">
       <ul id="filter-tags">
+          <li>
+            <input id="no-tags" type="checkbox" hidden checked>
+            <label class="checkbox" for="no-tags">no tags</label>
+          </li>
         {{#each tags}}
           <li>
-            <input id="{{@index}}" type="checkbox" hidden>
+            <input id="{{@index}}" type="checkbox" hidden checked>
             <label class="checkbox" for="{{@index}}">{{this}}</label>
           </li>
         {{/each}}
@@ -76,7 +80,7 @@
                 <dd class="tag">{{this}}</dd>
               {{/each}}
             {{else}}
-              <dd class="tag">None</dd>
+              <dd class="tag">no tags</dd>
             {{/if}}
         </dl>
         <div class="button-wrapper">
