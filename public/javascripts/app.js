@@ -1,9 +1,9 @@
 class Contact {
   constructor({full_name, email, phone_number, tags, id = null}) {
-    this.id = id,
-    this.full_name = full_name,
-    this.email = email,
-    this.phone_number = phone_number,
+    this.id = id;
+    this.full_name = full_name;
+    this.email = email;
+    this.phone_number = phone_number;
     this.tags = tags;
     this.tagsArray = this.separateTags(tags);
   }
@@ -159,7 +159,7 @@ class ContactList {
 
   edit($form) {
     let contact = this.makeContactFromForm($form);
-    contact.edit()
+    contact.edit();
   }
 
   makeContactFromForm($form) {
@@ -249,10 +249,10 @@ class App {
   }
 
   populateEditForm(contact) {
-    $('#full_name').val(contact['full_name']);
-    $('#email').val(contact['email']);
-    $('#phone_number').val(contact['phone_number']);
-    $('#submit-edit-contact').attr('data-id', contact['id']);
+    $('#full_name').val(contact.full_name);
+    $('#email').val(contact.email);
+    $('#phone_number').val(contact.phone_number);
+    $('#submit-edit-contact').attr('data-id', contact.id);
     if (contact.tags) {
       this.populateTags(contact.tagsArray);
     }
@@ -301,7 +301,7 @@ class App {
   handleSubmitEdit(event) {
     event.preventDefault();
     let $form = $('#add-edit-contact');
-    
+
     if ($form.find('input:invalid').length > 0) {
       $form.find('input:invalid').each((_, input) => {
         let message = this.getErrorMessage(input);
@@ -417,7 +417,7 @@ class App {
     if (input.type === 'tel' && input.validity.patternMismatch) {
       message = "Please enter only numbers.";
     } else if (input.type === 'tel' && input.validity.tooShort) {
-      message = "Please enter 10 or 11 digits."
+      message = "Please enter 10 or 11 digits.";
     } else {
       message = input.validationMessage;
     }
@@ -445,4 +445,4 @@ class App {
   }
 }
 
-$(() => new App);
+$(() => new App());
