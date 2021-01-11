@@ -2,43 +2,15 @@
   {
     "full_name": "Calvin Conley",
     "phone_number": "12312312321",
-    "email": "calvin@conley25.com",
+    "email": "calvin@conley.com",
     "tags": "Myself,I,Me",
     "id": 2
   },
   {
-    "full_name": "Hobbes",
-    "phone_number": "1231231232",
-    "email": "hobbes@email.com",
-    "tags": "tiger,cartoons",
-    "id": 3
-  },
-  {
-    "full_name": "Donald Duck",
-    "phone_number": "1231231232",
-    "email": "Donald@duck.com",
-    "tags": "duck",
-    "id": 7
-  },
-  {
-    "full_name": "Bugs Bunny",
-    "phone_number": "1231231232",
-    "email": "bugs@bunny.com",
-    "tags": "bunny,cartoons",
-    "id": 8
-  },
-  {
     "full_name": "Daffy Duck",
-    "phone_number": "1231231232",
-    "email": "daffy@duck.com",
+    "phone_number": "12312312132",
+    "email": "daffy@duck25.com",
     "tags": "cartoons,duck",
     "id": 9
-  },
-  {
-    "full_name": "Superman",
-    "phone_number": "1231231232",
-    "email": "superman@hero.com",
-    "tags": "superhero",
-    "id": 10
   }
 ]

@@ -20,8 +20,7 @@ class Contact {
     $.post('/api/contacts', this);
   }
 
-  delete() {
-    let id = this.id;
+  static delete(id) {
     $.ajax({
       method: 'DELETE',
       url: `/api/contacts/${id}`,
@@ -74,10 +73,8 @@ class ContactList {
   }
 
   delete(id) {
-    this.get(id, contact => {
-      contact.delete();
-      this.reloadContacts();
-    });
+    Contact.delete(id);
+    this.reloadContacts();
   }
 
   reloadContacts() {
